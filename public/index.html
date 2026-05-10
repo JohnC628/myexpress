@@ -1,0 +1,125 @@
+<html>
+
+<head>
+  <title>Express</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>物價管理系統</h1>
+    <p style="text-align: center;">歡迎使用 Express 物價紀錄工具</p>
+
+    <form id="product-form">
+      <div>
+        <label for="date">日期:</label>
+        <input type="date" id="date" name="date" required>
+      </div>
+      <div>
+        <label for="product_name">產品名稱:</label>
+        <input type="text" id="product_name" name="product_name" placeholder="請輸入產品名稱" required>
+      </div>
+      <div>
+        <label for="price">產品價格:</label>
+        <input type="number" id="price" name="price" step="0.01" placeholder="0.00" required>
+      </div>
+      <button type="submit">提交紀錄</button>
+    </form>
+
+    <p id="response-message"></p>
+  </div>
+
+  <hr>
+
+  <div class="container">
+    <h2>查詢與產品資料表</h2>
+    <div class="search-box">
+      <label for="search-input">搜尋:</label>
+      <input type="text" id="search-input" placeholder="輸入產品名稱關鍵字來過濾..." oninput="filterTable()">
+    </div>
+    
+    <table id="product-table">
+      <thead>
+        <tr>
+          <th>日期</th>
+          <th>產品名稱</th>
+          <th>價格</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 資料將插入於此 -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    let allProducts = []; // 儲存所有從 API 取得的資料
+
+    // 取得資料並渲染表格的函式
+    async function loadProducts() {
+      const tableBody = document.querySelector('#product-table tbody');
+      try {
+        const response = await fetch('/api/quotes');
+        allProducts = await response.json();
+        
+        renderTable(allProducts);
+      } catch (error) {
+        console.error('Error fetching quotes:', error);
+      }
+    }
+
+    // 渲染表格的函式
+    function renderTable(data) {
+      const tableBody = document.querySelector('#product-table tbody');
+      tableBody.innerHTML = '';
+
+      data.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.date}</td>
+          <td>${item.product_name}</td>
+          <td>${item.price}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    // 簡易查詢邏輯：根據關鍵字過濾
+    function filterTable() {
+      const keyword = document.getElementById('search-input').value.toLowerCase();
+      const filteredData = allProducts.filter(item => 
+        item.product_name.toLowerCase().includes(keyword)
+      );
+      renderTable(filteredData);
+    }
+
+    // 頁面載入時執行
+    loadProducts();
+
+    document.getElementById('product-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const params = new URLSearchParams(formData).toString();
+      const messageElement = document.getElementById('response-message');
+
+      try {
+        const response = await fetch(`/api/insert?${params}`);
+        const data = await response.json();
+
+        // 顯示伺服器回傳的訊息
+        messageElement.textContent = data.message || data.msg || JSON.stringify(data);
+        
+        // 成功後重新載入表格
+        if (response.ok) {
+          loadProducts();
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        messageElement.textContent = '發生錯誤，請稍後再試。';
+      }
+    });
+  </script>
+</body>
+
+</html>
