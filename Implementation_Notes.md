@@ -42,7 +42,16 @@ import apiRouter from './routes/api.js';
 app.use('/api', apiRouter);
 ```
 
-## 5. 未來擴展方向 (待辦清單)
-- [ ] **前端頁面**：建立 [public/index.html](public/index.html) 與後端 API 連接。
-- [ ] **圖表呈現**：使用 Chart.js 展示物價走勢。
+## 5. 前端實作與圖表功能
+在 [public/index.html](public/index.html) 中實作了使用者界面與動態功能。
+
+- **數據呈現**：使用 HTML Table 展示歷史價格。
+- **動態圖表**：整合 [Chart.js](https://www.chartjs.org/) 展示價格隨時間變化的連通曲線圖。
+- **年份篩選**：實作了隱藏/顯示邏輯，允許使用者依年份過濾資料，且圖表會同步反應過濾後的數據。
+- **價格預測模組**：根據使用者提供的媒體報導數據（漲幅 25% 與 47%），實作了預測算法，基於資料庫中最新價格生成未來預期價格。
+
+## 6. 未來擴展方向 (待辦清單)
+- [x] **前端頁面**：建立 [public/index.html](public/index.html) 與後端 API 連接。
+- [x] **圖表呈現**：使用 Chart.js 展示物價走勢。
 - [ ] **安全性調整**：將 `/insert` 從 `GET` 修改為 `POST` 以符合 RESTful 規範。
+- [ ] **用戶認證**：增加登入功能，區分不同使用者的記錄。

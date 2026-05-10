@@ -5,13 +5,12 @@
 
 ## 二、系統需求
 ### 前端
-- HTML
-- CSS
-- JavaScript
+- HTML / CSS / JavaScript
+- **Chart.js v4**: 用於繪製價格趨勢圖
 
 ### 後端
-- Node.js
-- Express.js
+- Node.js / Express.js
+- **SQLite3**: 輕量級關聯式資料庫
 
 ### 資料庫
 - SQLite
@@ -64,3 +63,6 @@
 - [2026-05-10] 完成 `products` 資料表建立
 - [2026-05-10] 完成 API 路由開發與測試 (Thunder Client)
 - [2026-05-10] 撰寫 OpenSpec 開發紀錄文件
+- [2026-05-11] 實作前端頁面與資料庫串接
+- [2026-05-11] 整合 Chart.js 並補齊歷史 17 筆精確物價數據
+- [2026-05-11] 新增基於媒體報導漲幅 (25%, 47%) 的預測功能模組

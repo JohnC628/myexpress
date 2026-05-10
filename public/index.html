@@ -79,6 +79,8 @@
       const tableBody = document.querySelector('#product-table tbody');
       try {
         const response = await fetch('/api/quotes');
+        allProducts = await response.json();
+        
         renderTable(allProducts);
         updateChart(allProducts);
         calculatePrediction(allProducts);
@@ -108,6 +110,8 @@
       const year = document.getElementById('search-input').value.trim();
       if (!year) {
         renderTable(allProducts);
+        updateChart(allProducts);
+        calculatePrediction(allProducts);
         return;
       }
       
